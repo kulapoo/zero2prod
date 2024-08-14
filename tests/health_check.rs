@@ -2,18 +2,19 @@
 
 use std::net::TcpListener;
 
-use zero2prod;
+use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
+use zero2prod::{self, configuration::get_configuration};
 
 #[tokio::test]
 async fn health_check_works() {
     // Arrange
-    let address = spawn_app();
+    let app_address = spawn_app();
 
     let client = reqwest::Client::new();
 
     // Act
     let response = client
-        .get(&format!("{}/health_check", &address))
+        .get(&format!("{}/health_check", &app_address))
         .send()
         .await
         .expect("Failed to execute request.");
@@ -38,7 +39,12 @@ async fn subscribe_returns_a_200_for_valid_form_data() {
     // Arrange
     let app_address = spawn_app();
     let client = reqwest::Client::new();
+    let configuration = get_configuration().expect("Failed to read configuration");
+    let connection_string = configuration.database.connection_string();
 
+    let pool: Pool<Postgres> = PgPoolOptions::new()
+        .max_connections(5)  // Set the maximum number of connections in the pool
+        .connect(&connection_string).await.expect("Failed to connect");
     // Act
 
     let body = "name=le%20guin&email=ursula_le_guin%40gmail.com";
@@ -51,9 +57,16 @@ async fn subscribe_returns_a_200_for_valid_form_data() {
         .await
         .expect("Failed to execute request.");
 
-    // Assert
-
     assert_eq!(200, response.status().as_u16());
+
+    // Assert
+    let saved = sqlx::query!("SELECT email, name FROM subscriptions")
+        .fetch_one(&pool)
+        .await
+        .expect("Failed to fetch saved subscription.");
+    assert_eq!(saved.email, "ursula_le_guin@gmail.com");
+    assert_eq!(saved.name, "le guin");
+
 }
 
 #[tokio::test]
