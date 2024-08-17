@@ -17,12 +17,13 @@ async fn main() -> std::io::Result<()> {
     let configuration = get_configuration().expect("Failed to read configuration.");
 
     let pool: Pool<Postgres> = PgPoolOptions::new()
-        .max_connections(5) // Set the maximum number of connections in the pool
-        .connect(&configuration.database.connection_string().expose_secret())
-        .await
+        .connect_lazy(&configuration.database.connection_string().expose_secret())
         .expect("Failed to connect");
 
-    let address = format!("127.0.0.1:{}", configuration.application_port);
+        let address = format!(
+            "{}:{}",
+            configuration.application.host, configuration.application.port
+        );
 
     let listener = TcpListener::bind(address).expect("Failed to bind random port");
 
