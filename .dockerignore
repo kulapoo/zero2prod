@@ -6,3 +6,4 @@ deploy/
 tests/
 Dockerfile
 scripts/
+migrations/
