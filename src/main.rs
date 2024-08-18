@@ -1,7 +1,6 @@
 use std::net::TcpListener;
 
 use actix_web::{HttpRequest, Responder};
-use secrecy::ExposeSecret;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 use zero2prod::{
     configuration::get_configuration,
