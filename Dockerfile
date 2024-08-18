@@ -34,7 +34,7 @@ ENV APP_ENVIRONMENT=production
 RUN apt-get update && apt-get install -y --no-install-recommends curl \
     && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
     && export PATH=$PATH:/root/.cargo/bin \
-    && cargo install sqlx-cli --no-default-features --features postgres
+    && cargo install --version='~0.7' sqlx-cli --no-default-features --features rustls,postgres
 
 RUN echo "The value of DATABASE_URL is $DATABASE_URL"
 
