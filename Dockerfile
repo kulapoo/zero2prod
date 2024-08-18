@@ -29,11 +29,15 @@ COPY configuration configuration
 COPY migrations migrations
 ENV APP_ENVIRONMENT=production
 
+
 # Install sqlx-cli for running migrations
 RUN apt-get update && apt-get install -y --no-install-recommends curl \
     && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
     && source $HOME/.cargo/env \
     && cargo install sqlx-cli --no-default-features --features postgres
+
+RUN echo "The value of DATABASE_URL is $DATABASE_URL"
+
 
 CMD sqlx migrate run
 
