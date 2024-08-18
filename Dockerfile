@@ -18,18 +18,9 @@ RUN cargo build --release --bin zero2prod
 
 FROM debian:bookworm-slim AS runtime
 WORKDIR /app
-
-RUN echo "The value of DATABASE_URL is $DATABASE_URL"
-
 RUN apt-get update -y \
-    && apt-get install -y --no-install-recommends \
-       gcc \
-       curl \
-       openssl \
-       ca-certificates \
-    && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
-    && export PATH=$PATH:/root/.cargo/bin \
-    && cargo install --version='~0.7' sqlx-cli --no-default-features --features rustls,postgres \
+    && apt-get install -y --no-install-recommends openssl ca-certificates \
+    # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
@@ -39,8 +30,8 @@ COPY migrations migrations
 ENV APP_ENVIRONMENT=production
 
 
+RUN echo "The value of DATABASE_URL is $DATABASE_URL"
 
 
-CMD sqlx migrate run
 
 ENTRYPOINT ["./zero2prod"]
