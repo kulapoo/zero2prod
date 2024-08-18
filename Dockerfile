@@ -16,6 +16,8 @@ ENV SQLX_OFFLINE=true
 # Build our project
 RUN cargo build --release --bin zero2prod
 
+RUN echo "The value of DATABASE_URL is $DATABASE_URL"
+
 FROM debian:bookworm-slim AS runtime
 WORKDIR /app
 RUN apt-get update -y \
@@ -26,12 +28,5 @@ RUN apt-get update -y \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /app/target/release/zero2prod zero2prod
 COPY configuration configuration
-COPY migrations migrations
-ENV APP_ENVIRONMENT=production
-
-
-RUN echo "The value of DATABASE_URL is $DATABASE_URL"
-
-
-
+ENV APP_ENVIRONMENT production
 ENTRYPOINT ["./zero2prod"]
