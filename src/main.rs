@@ -18,7 +18,6 @@ async fn main() -> std::io::Result<()> {
     let pool: Pool<Postgres> = PgPoolOptions::new()
         .connect_lazy_with(configuration.database.with_db());
 
-
         let address = format!(
             "{}:{}",
             configuration.application.host, configuration.application.port
