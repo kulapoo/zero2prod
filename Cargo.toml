@@ -19,12 +19,13 @@ serde-aux = "4"
 unicode-segmentation = "1"
 claims = "0.7"
 validator = { version = "0.16" }
+rand = { version = "0.8", features = ["std_rng"] }
+
 [dependencies.uuid]
 version = "1.10"
 features = [
     "v4", # Lets you generate random UUIDs
 ]
-
 [dependencies.sqlx]
 version = "0.8"
 default-features = false
