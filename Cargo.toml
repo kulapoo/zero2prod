@@ -22,6 +22,9 @@ validator = { version = "0.16" }
 rand = { version = "0.8", features = ["std_rng"] }
 thiserror = "1"
 anyhow = "1"
+base64 = "0.21"
+argon2 = { version = "0.4", features = ["std"] }
+
 
 [dependencies.uuid]
 version = "1.10"
