@@ -48,6 +48,9 @@ services:
       - key: APP_APPLICATION__HMAC_SECRET
         scope: RUN_TIME
         value: ${APP_APPLICATION__HMAC_SECRET}
+      - key: APP_REDIS__URI
+        scope: RUN_TIME
+        value: ${APP_REDIS__URI}
 databases:
   # PG = Postgres
   - engine: PG
