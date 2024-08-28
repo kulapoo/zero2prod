@@ -30,12 +30,13 @@ hmac = { version = "0.12", features = ["std"] }
 sha2 = "0.10"
 hex = "0.4"
 actix-web-flash-messages = { version = "0.4", features = ["cookies"] }
-
+actix-session = { version = "0.7", features = ["redis-rs-tls-session"] }
 
 [dependencies.uuid]
 version = "1.10"
 features = [
-    "v4", # Lets you generate random UUIDs
+    "v4",    # Lets you generate random UUIDs
+    "serde",
 ]
 [dependencies.sqlx]
 version = "0.8"
