@@ -99,6 +99,11 @@ pub async fn run(
             .route("/subscriptions/confirm", web::get().to(routes::confirm))
             .route("/newsletters", web::post().to(routes::publish_newsletter))
             .route("/admin/dashboard", web::get().to(routes::admin_dashboard))
+            .route(
+                "/admin/password",
+                web::get().to(routes::change_password_form),
+            )
+            .route("/admin/password", web::post().to(routes::change_password))
             .route("/", web::get().to(routes::home))
             .route("/login", web::get().to(routes::login_form))
             .route("/login", web::post().to(routes::login))
