@@ -1,3 +1,4 @@
+use crate::authentication::reject_anonymous_users;
 use crate::{
     configuration::{DatabaseSettings, Settings},
     email_client::EmailClient,
@@ -5,6 +6,7 @@ use crate::{
 };
 use actix_session::{storage::RedisSessionStore, SessionMiddleware};
 use actix_web::cookie::Key;
+use actix_web::middleware::from_fn;
 use actix_web::{
     dev::Server,
     web::{self, Data},
@@ -98,13 +100,14 @@ pub async fn run(
             .route("/subscriptions", web::post().to(routes::subscribe))
             .route("/subscriptions/confirm", web::get().to(routes::confirm))
             .route("/newsletters", web::post().to(routes::publish_newsletter))
-            .route("/admin/dashboard", web::get().to(routes::admin_dashboard))
-            .route(
-                "/admin/password",
-                web::get().to(routes::change_password_form),
+            .service(
+                web::scope("/admin")
+                    .wrap(from_fn(reject_anonymous_users))
+                    .route("/dashboard", web::get().to(routes::admin_dashboard))
+                    .route("/password", web::get().to(routes::change_password_form))
+                    .route("/password", web::post().to(routes::change_password))
+                    .route("/logout", web::post().to(routes::log_out)),
             )
-            .route("/admin/password", web::post().to(routes::change_password))
-            .route("/admin/logout", web::post().to(routes::log_out))
             .route("/", web::get().to(routes::home))
             .route("/login", web::get().to(routes::login_form))
             .route("/login", web::post().to(routes::login))
