@@ -104,6 +104,7 @@ pub async fn run(
                 web::get().to(routes::change_password_form),
             )
             .route("/admin/password", web::post().to(routes::change_password))
+            .route("/admin/logout", web::post().to(routes::log_out))
             .route("/", web::get().to(routes::home))
             .route("/login", web::get().to(routes::login_form))
             .route("/login", web::post().to(routes::login))
