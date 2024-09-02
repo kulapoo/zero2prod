@@ -102,10 +102,10 @@ pub async fn change_password(
         .context("Failed to hash password")?;
     sqlx::query!(
         r#"
-UPDATE users
-SET password_hash = $1
-WHERE user_id = $2
-"#,
+        UPDATE users
+        SET password_hash = $1
+        WHERE user_id = $2
+        "#,
         password_hash.expose_secret(),
         user_id
     )
