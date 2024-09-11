@@ -931,10 +931,6 @@ admin pwd: everythinghastostartsomewhere
 - columns to keep track of how many attempts have already taken place and how long we should wait before trying again.
 - expiry mechanism for our idempotency keys
 
-# TODO
-
-- go back to study the Authentication and Authorisation, password hashing
-
 # Related
 
 - [[Inner development loop]]
